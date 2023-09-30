@@ -1,7 +1,6 @@
 async function initMap() {
   // Request needed libraries.
   const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   // Create map, centered at position
   const position = {lat:42.353350, lng:-71.091525};
   map = new Map(document.getElementById("map"), {
@@ -19,16 +18,22 @@ async function initMap() {
 async function putMarkers(){
   // get bus data
 	const locations = await getBusLocations();
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
   locations.forEach((bus) => {
     console.log(bus.id);
-    // The marker, positioned at Uluru
-    // const marker = new AdvancedMarkerElement({
-    //   map: map,
-    //   position: position,
-    //   title: "Uluru",
-    // });
+
+    const position = {
+      lat: bus.attributes.latitude,
+      lng: bus.attributes.longitude
+    };
+    const marker = new AdvancedMarkerElement({
+      map: map,
+      position: position,
+      title: bus.id,
+    });
   })
+
 	console.log(new Date().toISOString());
 	console.log(locations);
 	setTimeout(putMarkers, 15000);
@@ -45,4 +50,5 @@ async function getBusLocations(){
 
 let map;  // Initialize and add the map
 var markers = []; // Save markers in this array
+var AdvancedMarkerElement;
 initMap();
