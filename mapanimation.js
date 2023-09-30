@@ -18,27 +18,30 @@ async function initMap() {
 async function putMarkers(){
   // get bus data
 	const locations = await getBusLocations();
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
   locations.forEach((bus) => {
     console.log(bus.id);
-
-    const position = {
-      lat: bus.attributes.latitude,
-      lng: bus.attributes.longitude
-    };
-    const marker = new AdvancedMarkerElement({
-      map: map,
-      position: position,
-      title: `Bus ${bus.id}`,
-      id: bus.id,
-    });
-	  markers.push(marker);
+    newMarker(bus);
   })
 
 	console.log(new Date().toISOString());
 	console.log(locations);
 	setTimeout(putMarkers, 15000);
+}
+
+async function newMarker(bus) {
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  const position = {
+    lat: bus.attributes.latitude,
+    lng: bus.attributes.longitude
+  };
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: `Bus ${bus.id}`,
+    id: bus.id,
+  });
+  markers.push(marker);
 }
 
 // Request bus data from MBTA
