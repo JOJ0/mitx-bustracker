@@ -30,8 +30,10 @@ async function putMarkers(){
     const marker = new AdvancedMarkerElement({
       map: map,
       position: position,
-      title: bus.id,
+      title: `Bus ${bus.id}`,
+      id: bus.id,
     });
+	  markers.push(marker);
   })
 
 	console.log(new Date().toISOString());
