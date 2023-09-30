@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realtime Bus Track - MITx MERN Course</title>
+  <!--Create a file named google-maps-sdk.js containing the "inline code" and
+  your API key as described in the Google Maps Platform documentation:
+  https://developers.google.com/maps/documentation/javascript/load-maps-js-api#dynamic-library-import
+  -->
+  <script src="google-maps-sdk.js"></script>
+</head>
+<body>
+  <div id="map" style="width:1024px; height:768px"></div>
+</body>
+<script>
+
+
+async function initMap() {
+  // Request needed libraries.
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  // Create map, centered at position
+  const position = {lat:42.353350, lng:-71.091525};
+  map = new Map(document.getElementById("map"), {
+    zoom: 14,
+    center: position,
+		mapTypeId : google.maps.MapTypeId.ROADMAP,
+    mapId: "JT_MITX_BUS",
+  });
+  // Start main program
+  putMarkers();
+
+}
+
+
+async function putMarkers(){
+  // get bus data
+	const locations = await getBusLocations();
+
+  locations.forEach((bus) => {
+    console.log(bus.id);
+    // The marker, positioned at Uluru
+    // const marker = new AdvancedMarkerElement({
+    //   map: map,
+    //   position: position,
+    //   title: "Uluru",
+    // });
+  })
+	console.log(new Date().toISOString());
+	console.log(locations);
+	setTimeout(putMarkers, 15000);
+}
+
+// Request bus data from MBTA
+async function getBusLocations(){
+	const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
+	const response = await fetch(url);
+	const json     = await response.json();
+	return json.data;
+}
+
+
+let map;  // Initialize and add the map
+var markers = []; // Save markers in this array
+initMap();
+
+</script>
+</html>
