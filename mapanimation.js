@@ -14,7 +14,6 @@ async function initMap() {
 
 }
 
-
 async function putMarkers(){
   // get bus data
 	const locations = await getBusLocations();
@@ -98,5 +97,4 @@ function getRandomColor() {
 
 let map;  // Initialize and add the map
 var markers = []; // Save markers in this array
-var AdvancedMarkerElement;
 initMap();
