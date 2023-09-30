@@ -21,7 +21,13 @@ async function putMarkers(){
 
   locations.forEach((bus) => {
     console.log(bus.id);
-    newMarker(bus);
+    let marker = existingMarker(bus.id);
+    if (marker) {
+      console.log(bus.id, "existing already.");
+    }
+    else {
+      newMarker(bus);
+    }
   })
 
 	console.log(new Date().toISOString());
@@ -41,7 +47,17 @@ async function newMarker(bus) {
     title: `Bus ${bus.id}`,
     id: bus.id,
   });
+  console.log("New marker added:", marker)
   markers.push(marker);
+}
+
+function existingMarker(busId) {
+  /**
+   * Returns an existing marker by looking up its ID, or undefined otherwise.
+  */
+  var result = markers.find(item => item.title === `Bus ${busId}`);
+  console.log("result:", result);
+  return result;
 }
 
 // Request bus data from MBTA
