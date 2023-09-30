@@ -23,7 +23,8 @@ async function putMarkers(){
     console.log(bus.id);
     let marker = existingMarker(bus.id);
     if (marker) {
-      console.log(bus.id, "existing already.");
+      console.log(bus.id, "existing already. Relocating marker...");
+      relocateMarker(marker, bus)
     }
     else {
       newMarker(bus);
@@ -47,7 +48,7 @@ async function newMarker(bus) {
     title: `Bus ${bus.id}`,
     id: bus.id,
   });
-  console.log("New marker added:", marker)
+  console.log("New marker added:", marker.title)
   markers.push(marker);
 }
 
@@ -56,8 +57,17 @@ function existingMarker(busId) {
    * Returns an existing marker by looking up its ID, or undefined otherwise.
   */
   var result = markers.find(item => item.title === `Bus ${busId}`);
-  console.log("result:", result);
   return result;
+}
+
+function relocateMarker(marker, bus) {
+  /**
+   * Relocates existing marker with coordinates found in the bus object.
+   */
+  marker.position = {
+    lat: bus.attributes.latitude,
+    lng: bus.attributes.longitude,
+  };
 }
 
 // Request bus data from MBTA
