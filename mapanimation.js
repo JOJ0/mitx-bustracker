@@ -37,16 +37,24 @@ async function putMarkers(){
 }
 
 async function newMarker(bus) {
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
   const position = {
     lat: bus.attributes.latitude,
     lng: bus.attributes.longitude
   };
+  // Change the background color.
+  randCol = getRandomColor();
+  const pinBackground = new PinElement({
+    background: randCol,
+    borderColor: randCol,
+    glyphColor: "#444444",
+  });
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,
     title: `Bus ${bus.id}`,
     id: bus.id,
+    content: pinBackground.element,
   });
   console.log("New marker added:", marker.title)
   markers.push(marker);
@@ -76,6 +84,15 @@ async function getBusLocations(){
 	const response = await fetch(url);
 	const json     = await response.json();
 	return json.data;
+}
+
+function getRandomColor() {
+  function getRandomHex() {
+    let val = Math.floor(Math.random() * 256)
+    var str = val.toString(16);
+    return str
+  }
+  return '#' + getRandomHex() + getRandomHex() + getRandomHex();
 }
 
 
