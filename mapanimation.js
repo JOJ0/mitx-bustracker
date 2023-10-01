@@ -1,7 +1,9 @@
 async function initMap() {
-  // Request needed libraries.
+  /**
+  * Dynamically loads the maps library, centers at the target area, and
+  * launches the main program loop.
+  */
   const { Map } = await google.maps.importLibrary("maps");
-  // Create map, centered at position
   const position = {lat:42.353350, lng:-71.091525};
   map = new Map(document.getElementById("map"), {
     zoom: 14,
@@ -9,13 +11,15 @@ async function initMap() {
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
     mapId: "JT_MITX_BUS",
   });
-  // Start main program
-  putMarkers();
+  putMarkers();  // Start main program
 
 }
 
 async function putMarkers(){
-  // get bus data
+  /**
+  * Fetches bus locations, checks for existing markers and updates them or
+  * creates new ones. Calls itself every 15 seconds.
+  */
 	const locations = await getBusLocations();
 
   locations.forEach((bus) => {
@@ -36,12 +40,14 @@ async function putMarkers(){
 }
 
 async function newMarker(bus) {
+  /**
+  * Adds a new marker with a separate random color for each bus to the map.
+  */
   const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
   const position = {
     lat: bus.attributes.latitude,
     lng: bus.attributes.longitude
   };
-  // Change the background color.
   randCol = getRandomColor();
   const pinBackground = new PinElement({
     background: randCol,
@@ -61,7 +67,7 @@ async function newMarker(bus) {
 
 function existingMarker(busId) {
   /**
-   * Returns an existing marker by looking up its ID, or undefined otherwise.
+  * Returns an existing marker by looking up its ID, or undefined otherwise.
   */
   var result = markers.find(item => item.title === `Bus ${busId}`);
   return result;
@@ -69,16 +75,18 @@ function existingMarker(busId) {
 
 function relocateMarker(marker, bus) {
   /**
-   * Relocates existing marker with coordinates found in the bus object.
-   */
+  * Relocates existing marker with coordinates found in the bus object.
+  */
   marker.position = {
     lat: bus.attributes.latitude,
     lng: bus.attributes.longitude,
   };
 }
 
-// Request bus data from MBTA
 async function getBusLocations(){
+  /**
+  * Request realtime bus data from MBTA. No API key required.
+  */
 	const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
 	const response = await fetch(url);
 	const json     = await response.json();
@@ -86,6 +94,9 @@ async function getBusLocations(){
 }
 
 function getRandomColor() {
+  /**
+  * Returns a hex string, representing a random color.
+  */
   function getRandomHex() {
     let val = Math.floor(Math.random() * 256)
     var str = val.toString(16);
@@ -95,6 +106,6 @@ function getRandomColor() {
 }
 
 
-let map;  // Initialize and add the map
-var markers = []; // Save markers in this array
+var map;  // Initialize the google map using this global variable.
+var markers = []; // Save markers in this array.
 initMap();
