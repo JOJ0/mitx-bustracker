@@ -23,10 +23,8 @@ async function putMarkers(){
 	const locations = await getBusLocations();
 
   locations.forEach((bus) => {
-    console.log(bus.id);
     let marker = existingMarker(bus.id);
     if (marker) {
-      console.log(bus.id, "existing already. Relocating marker...");
       relocateMarker(marker, bus)
     }
     else {
@@ -34,8 +32,6 @@ async function putMarkers(){
     }
   })
 
-	console.log(new Date().toISOString());
-	console.log(locations);
 	setTimeout(putMarkers, 15000);
 }
 
@@ -77,6 +73,7 @@ function relocateMarker(marker, bus) {
   /**
   * Relocates existing marker with coordinates found in the bus object.
   */
+  console.log(`Bus ${bus.id} existing already. Relocating marker...`);
   marker.position = {
     lat: bus.attributes.latitude,
     lng: bus.attributes.longitude,
@@ -90,6 +87,11 @@ async function getBusLocations(){
 	const url = 'https://api-v3.mbta.com/vehicles?filter[route]=1&include=trip';
 	const response = await fetch(url);
 	const json     = await response.json();
+	timestamp = new Date().toISOString();
+  console.log(
+    `Current line 1 bus locations requested from MBTA at ${timestamp}:`
+  )
+  console.log(json.data)
 	return json.data;
 }
 
