@@ -8,6 +8,7 @@ Displays a map containing a portion of Boston Massachusetts around the location 
 
 Uses the API's provided by "The Google Maps Platform" and the "Massachusettes Bay Transport Authority" (MBTA).
 
+<img height="400px" src="./assets/bustracker-screenshot-2023-10-01.png"/>
 
 ## How to Run
 
